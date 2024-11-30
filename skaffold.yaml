@@ -6,10 +6,11 @@ manifests:
   rawYaml:
     - ./infra/k8s/*
 build:
-  local:
-    push: false
+  googleCloudBuild:
+    projectId: ticketz-dev-433920
   artifacts:
-    - image: moswilamdev/ticketz/auth
+    - image: eu.gcr.io/ticketz-dev-433920/auth
+    #- image: moswilamdev/auth
       context: auth
       docker:
         dockerfile: Dockerfile
