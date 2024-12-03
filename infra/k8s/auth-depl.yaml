@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: auth
-          image: eu.gcr.io/ticketz-dev-433920/auth
+          #image: eu.gcr.io/ticketzz/auth
+          image: moswilamdev/auth
 --- 
 apiVersion: v1
 kind: Service
