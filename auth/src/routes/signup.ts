@@ -2,12 +2,13 @@ import express, { Request, Response } from 'express';
 import { signUpValidationScehma } from '../validation/schemas';
 import { validationResult } from 'express-validator';
 import { RequestValidationError } from '../errors/request-validation-errors';
-import { DatabaseConnectionError } from '../errors/database-connection-error';
+import { User } from '../models/user';
+import { BadRequestError } from '../errors/bad-request-error';
 
 const router = express.Router();
 
 
-router.post('/api/users/signup', signUpValidationScehma, (req: Request, res: Response) => {
+router.post('/api/users/signup', signUpValidationScehma, async (req: Request, res: Response) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -15,9 +16,16 @@ router.post('/api/users/signup', signUpValidationScehma, (req: Request, res: Res
   }
 
   const { email, password } = req.body;
-  throw new DatabaseConnectionError();
 
-  res.send('User created yoo');
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    throw new BadRequestError('Email in use');
+  }
+
+  const user = User.build({ email, password });
+  await user.save();
+
+  res.status(201).send(user);
 });
 
 export { router as signupRouter };
