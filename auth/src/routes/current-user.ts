@@ -1,21 +1,24 @@
 import express, { Request, Response } from 'express';
 import { signUpValidationScehma } from '../validation/schemas';
 import { validationResult } from 'express-validator';
+import jwt from 'jsonwebtoken';
 import { DatabaseConnectionError } from '../errors/database-connection-error';
 
 const router = express.Router();
 
 
-router.get('/api/users/currentuser', signUpValidationScehma, (req: Request, res: Response) => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(400).send(errors.array());
+router.get('/api/users/currentuser', (req: Request, res: Response) => {
+  console.log('currentUser');
+  if (!req.session || !req.session.jwt) {
+    return res.send({ currentUser: null });
   }
 
-  throw new DatabaseConnectionError();
-
-  res.send('User created');
+  try {
+    const payload = jwt.verify(req.session.jwt, process.env.JWT_KEY!) as any;
+    res.send({ currentUser: payload });
+  } catch (error) {
+    return res.send({ currentUser: null });
+  }
 });
 
 export { router as currentUserRouter };

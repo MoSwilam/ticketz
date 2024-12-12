@@ -5,17 +5,12 @@ import { RequestValidationError } from '../errors/request-validation-errors';
 import { User } from '../models/user';
 import { BadRequestError } from '../errors/bad-request-error';
 import jwt from 'jsonwebtoken';
+import { validationRequest } from '../middlewares/validate-request';
 
 const router = express.Router();
 
 
-router.post('/api/users/signup', signUpValidationScehma, async (req: Request, res: Response) => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    throw new RequestValidationError(errors.array());
-  }
-
+router.post('/api/users/signup', signUpValidationScehma, validationRequest, async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   const existingUser = await User.findOne({ email });
