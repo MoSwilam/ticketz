@@ -16,6 +16,12 @@ spec:
         - name: auth
           #image: eu.gcr.io/ticketzz/auth
           image: moswilamdev/auth
+          env:
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jst-secret
+                  key: JWT_KEY
 --- 
 apiVersion: v1
 kind: Service

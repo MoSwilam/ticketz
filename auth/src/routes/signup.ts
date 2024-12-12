@@ -30,7 +30,7 @@ router.post('/api/users/signup', signUpValidationScehma, async (req: Request, re
   const userJwt = jwt.sign({
     id: user.id,
     email: user.email
-  }, 'asdf');
+  }, process.env.JWT_KEY!);
 
   
   // Store it on session object
