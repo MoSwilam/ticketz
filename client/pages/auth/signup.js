@@ -16,8 +16,6 @@ export default function Signup() {
     try {
       e.preventDefault();
 
-     
-
       doRequest();
     } catch (error) {
       setError(error.response.data.errors);
