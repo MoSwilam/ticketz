@@ -4,7 +4,7 @@ import { app } from './app';
 
 const port = 3000;
 const start = async () => {
-  if (!process.env.JWT_KEY) {
+  if (!process.env.JWT_SECRET) {
     throw new Error('JWT_KEY must be defined');
   }
 
